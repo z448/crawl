@@ -54,8 +54,3 @@ pQuery($response)->find(".fbLastActiveTimestamp")->each(
     sub { print pQuery($_)->text, "\n" }
 );
 
-
-
-__DATA__
-qq|curl 'https://www.dropbox.com/home' -H 'Cookie: cookie_notif=seen; gvc=MjE0MTM1MDQ4MDEzMjA2NDg5NzUxNDQ4NTk2MDk2MzA5NzM3OTkw; _ga=GA1.2.1867053558.1482864542; _dc_gtm_UA-279179-2=1; lid=AACVpP18KoRPVxPAzmdKJIKjt60YcHS8F4tSvyEOwSSXEQ; blid=AABIMSh60CAs3St0xfQDlflcz0-pCwr0ITldXSCen9NgJg; __Host-ss=hWvf-48Yic;
-jar=W3sidWlkIjogNDA3NzQ1NDMsICJoIjogIiIsICJleHBpcmVzIjogMTU3NzQ3MjU0NywgIm5zIjogNjUyNzcyNjYsICJyZW1lbWJlciI6IHRydWV9XQ%3D%3D; t=sCp8hpu87QMz8LfVNafV03e7; __Host-js_csrf=sCp8hpu87QMz8LfVNafV03e7; bjar=W3sidWlkIjogNDA3NzQ1NDMsICJzZXNzX2lkIjogMTkwMDQ1ODgxMzYyMjE0NTk3MDY1MDE3NTc2MzM0MzI3MjA5OTM3LCAiZXhwaXJlcyI6IDE1Nzc0NzI1NDcsICJ0ZWFtX2lkIjogIiIsICJyb2xlIjogInBlcnNvbmFsIn1d; locale=en'|;
