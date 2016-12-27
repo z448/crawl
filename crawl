@@ -9,13 +9,14 @@ my $binary_cookie = '/var/mobile/Containers/Data/Application/A740CCD5-428E-4E5B-
 my $url = $ARGV[0];
 my $filter = $url;
 $filter =~ s/(.*?)(\..*?)(\/.*)/$2/;
+print $filter;
 
 my $decrypt = sub {
     my $b = shift;
     my $c = `safari_cookie_bin.pl $b`;
 };
 
-#print $decrypt->($binary_cookie);
+print $decrypt->($binary_cookie);
 
 sub parse {
     my( $cookie ) = @_;
@@ -28,7 +29,7 @@ sub parse {
         chomp;
         ( $c{1}, $c{2}, $c3{3}, $c{4}, $c{5}, $c{6} ) =  split(' ',$_);
         push @c, {%c};
-        #push @c, {%c} if $c{2} eq $filter;
+        #push @c, {%c} if $c{2} =~ /$filter/;
     }
 
     return \@c;
@@ -38,19 +39,31 @@ sub parse {
 my $response;
 {
     my @cookie = @{parse($decrypt->($binary_cookie))};
-    print Dumper(@{parse($decrypt->($binary_cookie))}) ;
+    print Dumper(@{parse($decrypt->($binary_cookie))});
     my $cookie = ' ';
 
     for(@cookie){
         $cookie .= $_->{6} . '=' . $_->{5} . '; ';
     }
 
-    my $curl = qq|curl '$url' -H 'Cookie: | . $cookie . "'";; 
+    #my $ua = q|Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1636.0 Safari/537.36|;
+    #my $ua = q|Mozilla/5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H143|;
+    my $ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12H143 Safari/600.1.4";
+    #my $ua ="Mozilla/5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12H143 Safari/600.1.4";
+    my $curl = qq|curl --user-agent '$ua' -L '$url' -H 'Cookie: | . $cookie . "'";
     $response = `$curl`;
 }
 
+print $curl;
+print $response;
+print "\n";
+print $filter;
 
-pQuery($response)->find(".fbLastActiveTimestamp")->each(
-    sub { print pQuery($_)->text, "\n" }
+__DATA__
+pQuery($response)->find("span")->each(
+    sub { print pQuery($_)->text . "\n" }
 );
+
+
+chrome osx: /Users/zdenek/Library/Application Support/Google/Chrome//Default/Cookies
 
